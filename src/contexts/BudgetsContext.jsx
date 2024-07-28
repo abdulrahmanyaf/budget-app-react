@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import useLocalStorage from "../hooks/useLocalStorge";
 const BudgetsContext = React.createContext();
 
 export function useBudgets() {
   return useContext(BudgetsContext);
 }
 
-export default function BudgetsProvider({Children}) {
-  const [budgets, setBudgets] = useState([]);
-  const [expenses, setExpenses] = useState([]);
+export const BudgetsProvider = ({children}) => {
+  const [budgets, setBudgets] = useLocalStorage("budgets", []);
+  const [expenses, setExpenses] = useLocalStorage("expenses", []);
 
   function addBudget({name, max}) {
     setBudgets((prevBudgets) => {
@@ -55,6 +56,6 @@ export default function BudgetsProvider({Children}) {
       addBudget,
       deleteBudget,
       deleteExpense
-    }}>{Children}</BudgetsContext.Provider>
+    }}>{children}</BudgetsContext.Provider>
   );
 }
