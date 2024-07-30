@@ -28,13 +28,19 @@ export const BudgetsProvider = ({children}) => {
     });
   }
 
-  function deleteBudget({budgetId}) {
+  function deleteBudget(budgetId) {
+    setExpenses(prevExpenses => {
+        return prevExpenses.map(expense => {
+            if (expense.budgetId !== budgetId) return expense
+            return {...expense, budgetId: UNCATEGORISED_BUDGET_ID}
+        })
+    })
     setBudgets(prevBudgets => {
         return prevBudgets.filter(budget => budget.id !== budgetId)
     })
   }
 
-  function deleteExpense({expenseId}) {
+  function deleteExpense(expenseId) {
     setExpenses(prevExpenses => {
         return prevExpenses.filter(expense => expense.id !== expenseId)
     })
